@@ -25,3 +25,16 @@ export function deleteMsg(apiRoute, params) {
     })
   }
 }
+export function postMsg(apiRoute, params) {
+  if (params) {
+    return request({
+      url: apiRoute + '?' + params,
+      method: 'post'
+    })
+  } else {
+    return request({
+      url: apiRoute,
+      method: 'post'
+    })
+  }
+}

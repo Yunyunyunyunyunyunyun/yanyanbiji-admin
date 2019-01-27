@@ -15,7 +15,7 @@
             </el-input>
           </el-col>
           <el-col :span="3">
-            <el-button type="primary" size="small" class="searchBtn">搜索</el-button>
+            <el-button type="primary" size="small" class="searchBtn" @click="searchKey()">搜索</el-button>
           </el-col>
         </el-row>
       </div>
@@ -38,16 +38,16 @@
       </div>
       <div class="total">
         <el-row>
-          <el-col :span="15" style="min-width: 150px;">（共{{messageTotal}}条消息）</el-col>
+          <el-col :span="15" style="min-width: 150px;">（共{{pageTotal}}条消息）</el-col>
           <el-col :span="9" align="right">
-            <el-button size="small">删除</el-button>
+            <el-button size="small" class="del" @click="delMsg()">删除</el-button>
           </el-col>
         </el-row>
       </div>
       <div class="tableTotal">
         <el-table
           ref="multipleTable"
-          :data="trueData"
+          :data="tableData"
           border
           tooltip-effect="dark"
           style="width: 100%"
@@ -62,34 +62,35 @@
             label="询问者ID"
             show-overflow-tooltip
             align="center">
-            <template slot-scope="scope">{{ scope.row.id }}</template>
+            <template slot-scope="scope">{{ scope.row.creatorId }}</template>
           </el-table-column>
           <el-table-column
-            prop="askingTitle"
+            prop="title"
             label="询问标题"
             show-overflow-tooltip
             align="center">
           </el-table-column>
           <el-table-column
-            prop="problemSpecialty"
+            prop="specialty"
             label="问题专业"
             show-overflow-tooltip
             align="center">
           </el-table-column>
           <el-table-column
-            prop="problemSubjects"
+            prop="course"
             label="问题科目"
             show-overflow-tooltip
             align="center">
           </el-table-column>
           <el-table-column
-            prop="problemStat"
+            prop="status"
             label="问题状态"
             show-overflow-tooltip
-            align="center">
+            align="center"
+            :formatter="formatStatus">
           </el-table-column>
           <el-table-column
-            prop="adoption"
+            prop="acceptPersent"
             label="采纳率"
             show-overflow-tooltip
             align="center">
@@ -116,307 +117,297 @@
         </el-pagination>
       </div>
     </div>
+    <el-dialog title="问题详情" :visible.sync="dialogVisible" width="90%">
+      <div class="details firstDetails">
+        <el-row>
+          <el-col :span="2" style="width: 80px;">询问者ID</el-col>
+          <el-col :span="4" style="margin-right: 20px;">
+            <el-input
+              :disabled="true"
+              v-model="contentDetails.creatorId">
+            </el-input>
+          </el-col>
+          <el-col :span="2" style="width: 80px;">询问时间</el-col>
+          <el-col :span="4" style="margin-right: 20px;">
+            <el-input
+              :disabled="true"
+              v-model="contentDetails.createTime">
+            </el-input>
+          </el-col>
+          <el-col :span="2" style="width: 80px;">问题专业</el-col>
+          <el-col :span="4" style="margin-right: 20px;">
+            <el-input
+              :disabled="true"
+              v-model="contentDetails.specialty">
+            </el-input>
+          </el-col>
+          <el-col :span="2" style="width: 80px;">问题科目</el-col>
+          <el-col :span="4">
+            <el-input
+              :disabled="true"
+              v-model="contentDetails.course">
+            </el-input>
+          </el-col>
+        </el-row>
+      </div>
+      <div class="details">
+        <el-row>
+          <el-col :span="2" style="width: 80px;">问题标题</el-col>
+          <el-col :span="8" style="margin-right: 20px;">
+            <el-input
+              :disabled="true"
+              v-model="contentDetails.title">
+            </el-input>
+          </el-col>
+          <el-col :span="2" style="width: 80px;">问题限时</el-col>
+          <el-col :span="8">
+            <el-input
+              :disabled="true"
+              v-model="contentDetails.expireTime">
+            </el-input>
+          </el-col>
+        </el-row>
+      </div>
+      <div class="details">
+        问题描述
+        <el-input
+          type="textarea"
+          :disabled="true"
+          v-model="contentDetails.questionDetail">
+        </el-input>
+      </div>
+      <div class="details">
+        <el-row>
+          <el-col :span="24">
+            <img v-for="(item, index) in contentDetails.questionImagesList" :key="index" :src="item.url" style="max-height: 300px; margin-right: 10px;"/>
+          </el-col>
+        </el-row>
+      </div>
+      <div class="details">
+        问题答案
+        <el-input
+          type="textarea"
+          :disabled="true"
+          v-model="contentDetails.content">
+        </el-input>
+      </div>
+      <div class="details">
+        <el-row>
+          <el-col :span="24">
+            <img v-for="(item, index) in contentDetails.answerImagesList" :key="index" :src="item.url" style="max-height: 300px; margin-right: 10px;"/>
+          </el-col>
+        </el-row>
+      </div>
+      <div class="details">
+        <el-row>
+          <el-col :span="8"></el-col>
+          <el-col :span="3" style="width: 100px;">回答者昵称</el-col>
+          <el-col :span="3" style="margin-right: 20px;">
+            <el-input
+              :disabled="true"
+              v-model="contentDetails.answerName">
+            </el-input>
+          </el-col>
+          <el-col :span="2" style="width: 80px;">查看次数</el-col>
+          <el-col :span="3" style="margin-right: 20px;">
+            <el-input
+              :disabled="true"
+              v-model="contentDetails.readCount">
+            </el-input>
+          </el-col>
+          <el-col :span="2" style="width: 80px;">采纳率</el-col>
+          <el-col :span="3">
+            <el-input
+              :disabled="true"
+              v-model="contentDetails.acceptPercent">
+            </el-input>
+          </el-col>
+        </el-row>
+      </div>
+      <div slot="footer" class="dialogFooter">
+        <el-button type="primary" @click="dialogVisible = false">返回</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script type="text/javascript">
-  import {panelTitle} from 'components'
+  import {panelTitle} from 'components';
+  import { getMsg, deleteMsg, postMsg } from "../../api/api";
 
   export default{
     data(){
       return {
         input: '',
         adoptionRates: [{
-          value: '选项1',
-          label: '80%以上'
-        }, {
-          value: '选项2',
-          label: '60-79%'
-        }, {
-          value: '选项3',
-          label: '40-59%'
-        }, {
-          value: '选项4',
-          label: '40%以下'
-        }],
-        adoptionRate: '选项1',
-        problemStatus: [{
-          value: '选项111',
+          value: '',
           label: '全部'
         }, {
-          value: '选项222',
-          label: '等待回答'
+          value: '80',
+          label: '80%以上'
         }, {
-          value: '选项333',
+          value: '60-79',
+          label: '60-79%'
+        }, {
+          value: '40-59',
+          label: '40-59%'
+        }, {
+          value: '40',
+          label: '40%以下'
+        }],
+        adoptionRate: '',
+        problemStatus: [{
+          value: '',
+          label: '全部'
+        }, {
+          value: 1,
+          label: '发布'
+        }, {
+          value: 2,
           label: '已回答'
         }, {
-          value: '选项444',
-          label: '已拒绝'
+          value: 3,
+          label: '拒绝'
+        }, {
+          value: 4,
+          label: '过期'
         }],
-        problemState: '选项111',
+        problemState: '',
         messageTotal: 288,
-        tableData: [{
-          id: 1,
-          weChatName: 'wangxiao1',
-          askingTitle: '王小1',
-          problemSpecialty: '南航1',
-          problemSubjects: '计算机1',
-          problemStat: '网络工程1',
-          adoption: '申请中'
-        }, {
-          id: 2,
-          weChatName: 'wangxiao2',
-          askingTitle: '王小2',
-          problemSpecialty: '南航2',
-          problemSubjects: '计算机2',
-          problemStat: '网络工程2',
-          adoption: '待审核'
-        }, {
-          id: 3,
-          weChatName: 'wangxiao3',
-          askingTitle: '王小3',
-          problemSpecialty: '南航3',
-          problemSubjects: '计算机3',
-          problemStat: '网络工程3',
-          adoption: '已拒绝'
-        }, {
-          id: 4,
-          weChatName: 'wangxiao4',
-          askingTitle: '王小4',
-          problemSpecialty: '南航4',
-          problemSubjects: '计算机4',
-          problemStat: '网络工程4',
-          adoption: '已通过'
-        }, {
-          id: 5,
-          weChatName: 'wangxiao5',
-          askingTitle: '王小5',
-          problemSpecialty: '南航5',
-          problemSubjects: '计算机5',
-          problemStat: '网络工程5',
-          adoption: '已通过'
-        }, {
-          id: 6,
-          weChatName: 'wangxiao5',
-          askingTitle: '王小5',
-          problemSpecialty: '南航5',
-          problemSubjects: '计算机5',
-          problemStat: '网络工程5',
-          adoption: '已通过'
-        }, {
-          id: 7,
-          weChatName: 'wangxiao5',
-          askingTitle: '王小5',
-          problemSpecialty: '南航5',
-          problemSubjects: '计算机5',
-          problemStat: '网络工程5',
-          adoption: '已通过'
-        }, {
-          id: 8,
-          weChatName: 'wangxiao5',
-          askingTitle: '王小5',
-          problemSpecialty: '南航5',
-          problemSubjects: '计算机5',
-          problemStat: '网络工程5',
-          adoption: '已通过'
-        }, {
-          id: 9,
-          weChatName: 'wangxiao5',
-          askingTitle: '王小5',
-          problemSpecialty: '南航5',
-          problemSubjects: '计算机5',
-          problemStat: '网络工程5',
-          adoption: '已通过'
-        }, {
-          id: 10,
-          weChatName: 'wangxiao5',
-          askingTitle: '王小5',
-          problemSpecialty: '南航5',
-          problemSubjects: '计算机5',
-          problemStat: '网络工程5',
-          adoption: '已通过'
-        }, {
-          id: 11,
-          weChatName: 'wangxiao5',
-          askingTitle: '王小5',
-          problemSpecialty: '南航5',
-          problemSubjects: '计算机5',
-          problemStat: '网络工程5',
-          adoption: '已通过'
-        }, {
-          id: 12,
-          weChatName: 'wangxiao5',
-          askingTitle: '王小5',
-          problemSpecialty: '南航5',
-          problemSubjects: '计算机5',
-          problemStat: '网络工程5',
-          adoption: '已通过'
-        }, {
-          id: 13,
-          weChatName: 'wangxiao5',
-          askingTitle: '王小5',
-          problemSpecialty: '南航5',
-          problemSubjects: '计算机5',
-          problemStat: '网络工程5',
-          adoption: '已通过'
-        }, {
-          id: 14,
-          weChatName: 'wangxiao5',
-          askingTitle: '王小5',
-          problemSpecialty: '南航5',
-          problemSubjects: '计算机5',
-          problemStat: '网络工程5',
-          adoption: '已通过'
-        }, {
-          id: 15,
-          weChatName: 'wangxiao5',
-          askingTitle: '王小5',
-          problemSpecialty: '南航5',
-          problemSubjects: '计算机5',
-          problemStat: '网络工程5',
-          adoption: '已通过'
-        }, {
-          id: 16,
-          weChatName: 'wangxiao5',
-          askingTitle: '王小5',
-          problemSpecialty: '南航5',
-          problemSubjects: '计算机5',
-          problemStat: '网络工程5',
-          adoption: '已通过'
-        }, {
-          id: 17,
-          weChatName: 'wangxiao5',
-          askingTitle: '王小5',
-          problemSpecialty: '南航5',
-          problemSubjects: '计算机5',
-          problemStat: '网络工程5',
-          adoption: '已通过'
-        }, {
-          id: 18,
-          weChatName: 'wangxiao5',
-          askingTitle: '王小5',
-          problemSpecialty: '南航5',
-          problemSubjects: '计算机5',
-          problemStat: '网络工程5',
-          adoption: '已通过'
-        }, {
-          id: 19,
-          weChatName: 'wangxiao5',
-          askingTitle: '王小5',
-          problemSpecialty: '南航5',
-          problemSubjects: '计算机5',
-          problemStat: '网络工程5',
-          adoption: '已通过'
-        }, {
-          id: 20,
-          weChatName: 'wangxiao5',
-          askingTitle: '王小5',
-          problemSpecialty: '南航5',
-          problemSubjects: '计算机5',
-          problemStat: '网络工程5',
-          adoption: '已通过'
-        }, {
-          id: 21,
-          weChatName: 'wangxiao5',
-          askingTitle: '王小5',
-          problemSpecialty: '南航5',
-          problemSubjects: '计算机5',
-          problemStat: '网络工程5',
-          adoption: '已通过'
-        }, {
-          id: 22,
-          weChatName: 'wangxiao5',
-          askingTitle: '王小5',
-          problemSpecialty: '南航5',
-          problemSubjects: '计算机5',
-          problemStat: '网络工程5',
-          adoption: '已通过'
-        }, {
-          id: 23,
-          weChatName: 'wangxiao5',
-          askingTitle: '王小5',
-          problemSpecialty: '南航5',
-          problemSubjects: '计算机5',
-          problemStat: '网络工程5',
-          adoption: '已通过'
-        }, {
-          id: 24,
-          weChatName: 'wangxiao5',
-          askingTitle: '王小5',
-          problemSpecialty: '南航5',
-          problemSubjects: '计算机5',
-          problemStat: '网络工程5',
-          adoption: '已通过'
-        }, {
-          id: 25,
-          weChatName: 'wangxiao5',
-          askingTitle: '王小5',
-          problemSpecialty: '南航5',
-          problemSubjects: '计算机5',
-          problemStat: '网络工程5',
-          adoption: '已通过'
-        }, {
-          id: 26,
-          weChatName: 'wangxiao5',
-          askingTitle: '王小5',
-          problemSpecialty: '南航5',
-          problemSubjects: '计算机5',
-          problemStat: '网络工程5',
-          adoption: '已通过'
-        }, {
-          id: 27,
-          weChatName: 'wangxiao5',
-          askingTitle: '王小5',
-          problemSpecialty: '南航5',
-          problemSubjects: '计算机5',
-          problemStat: '网络工程5',
-          adoption: '已通过'
-        }, {
-          id: 28,
-          weChatName: 'wangxiao6',
-          askingTitle: '王小6',
-          problemSpecialty: '南航6',
-          problemSubjects: '计算机6',
-          problemStat: '网络工程6',
-          adoption: '已通过'
-        }, {
-          id: 29,
-          weChatName: 'wangxiao7',
-          askingTitle: '王小7',
-          problemSpecialty: '南航7',
-          problemSubjects: '计算机7',
-          problemStat: '网络工程7',
-          adoption: '已拒绝'
-        }],
+        tableData: [],
         multipleSelection: [],
         currentPage: 1,
         pageSize: 5,
-        pageTotal: 10,
-        trueData: []
+        pageTotal: 0,
+        searchInput: '',
+        ids: [],
+        dialogVisible: false,
+        contentDetails: {
+          acceptPercent: 0,
+          answerAudiosList: null,
+          answerId: 0,
+          answerImagesList: null,
+          content: null,
+          creatorAvatar: null,
+          creatorName: null,
+          creatorSkilledCourse: null,
+          creatorSpecialtyName: null,
+          detail: null,
+          questionAudiosList: [],
+          questionId: 0,
+          questionImagesList: [],
+          readCount: 0,
+          targetAvatar: null,
+          targetName: null,
+          targetSkilledCourse: null,
+          targetSpecialtyName: null,
+          title: null
+        }
       }
     },
     components: {
       panelTitle
     },
     mounted() {
-      this.pageTotal = this.tableData.length;
-      this.trueData = this.tableData.slice((this.currentPage-1)*this.pageSize,this.currentPage*this.pageSize);
+      let path = 'questionMgr/list';
+      let params = 'pageSize=' + this.pageSize + '&pageNum=' + (this.currentPage-1);
+      this.getCurrencyMsg(path, params);
     },
     methods: {
       handleSelectionChange(val) {
         this.multipleSelection = val;
       },
+      delMsg() {
+        this.multipleSelection.forEach((item) => {
+          this.ids.push(item.questionId);
+        });
+        this.ids = Array.from(new Set(this.ids));
+        deleteMsg('questionMgr/delete', 'ids=' + this.ids).then((res) => {
+          if (res.data.code === 0) {
+            window.location.reload();
+          }
+        }).catch(error=>{
+          console.log(error);
+        });
+      },
+      getCurrencyMsg(path, params) {
+        getMsg(path, params).then(response => {
+          this.tableData = response.data.data.list;
+          this.pageTotal = response.data.data.totalCount;
+        }).catch(error=>{
+          console.log(error);
+        });
+      },
+      formatStatus(row, column, cellValue, index) {
+        return row.status == 1 ? '发布' : row.status == 2 ? '已回答' : row.status == 3 ? '拒绝' : row.status == 4 ? '过期' : '-';
+      },
+      searchKey() {
+        this.searchInput = this.input;
+        let path = 'questionMgr/list';
+        let params1 = 'pageSize=' + this.pageSize + '&pageNum=' + (this.currentPage-1) + '&term=' + this.input + '&acceptPersent=' + this.adoptionRate + '&status=' + this.problemState;
+        let params2 = 'pageSize=' + this.pageSize + '&pageNum=' + (this.currentPage-1) + '&acceptPersent=' + this.adoptionRate + '&status=' + this.problemState;
+        if (this.input != null && this.input !== '') {
+          this.getCurrencyMsg(path, params1);
+        } else {
+          this.getCurrencyMsg(path, params2);
+        }
+      },
       getRowKeys(row) {
         return row.id;
       },
       handleClick(msg) {
-        console.log('**********msg', msg);
+        this.dialogVisible = true;
+        const that = this;
+        getMsg('questionMgr/' + msg.questionId).then((res) => {
+          that.contentDetails = res.data.data;
+        })
       },
       handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
         this.currentPage = val;
-        this.trueData = this.tableData.slice((this.currentPage-1)*this.pageSize,this.currentPage*this.pageSize);
+        let path = 'questionMgr/list';
+        let params1 = 'pageSize=' + this.pageSize + '&pageNum=' + (this.currentPage-1) + '&term=' + this.searchInput + '&acceptPersent=' + this.adoptionRate + '&status=' + this.problemState;
+        let params2 = 'pageSize=' + this.pageSize + '&pageNum=' + (this.currentPage-1) + '&acceptPersent=' + this.adoptionRate + '&status=' + this.problemState;
+        if (this.searchInput != null && this.searchInput !== '') {
+          this.getCurrencyMsg(path, params1);
+        } else {
+          this.getCurrencyMsg(path, params2);
+        }
+      }
+    },
+    watch: {
+      adoptionRate(val) {
+        let path = 'questionMgr/list';
+        let params1 = 'pageSize=' + this.pageSize + '&pageNum=' + (this.currentPage-1) + '&term=' + this.searchInput + '&acceptPersent=' + val + '&status=' + this.problemState;
+        let params2 = 'pageSize=' + this.pageSize + '&pageNum=' + (this.currentPage-1) + '&acceptPersent=' + val + '&status=' + this.problemState;
+        if (this.searchInput != null && this.searchInput !== '') {
+          this.getCurrencyMsg(path, params1);
+        } else {
+          this.getCurrencyMsg(path, params2);
+        }
+      },
+      problemState(val) {
+        let path = 'questionMgr/list';
+        let params1 = 'pageSize=' + this.pageSize + '&pageNum=' + (this.currentPage-1) + '&term=' + this.searchInput + '&status=' + val + '&acceptPersent=' + this.adoptionRate;
+        let params2 = 'pageSize=' + this.pageSize + '&pageNum=' + (this.currentPage-1) + '&status=' + val + '&acceptPersent=' + this.adoptionRate;
+        if (this.searchInput != null && this.searchInput !== '') {
+          this.getCurrencyMsg(path, params1);
+        } else {
+          this.getCurrencyMsg(path, params2);
+        }
       }
     }
   }
 </script>
+<style scoped>
+  .dialogFooter {
+    text-align: center;
+  }
+  .details {
+    line-height: 40px;
+    padding: 5px 0;
+  }
+  .firstDetails {
+    border-top: 1px dashed #bbb;
+    padding: 10px 0;
+  }
+</style>
 

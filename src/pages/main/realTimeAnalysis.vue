@@ -85,7 +85,8 @@
   </div>
 </template>
 <script type="text/javascript">
-  import {panelTitle} from 'components'
+  import {panelTitle} from 'components';
+  import { getMsg } from "../../api/api";
 
   export default{
     data(){
@@ -95,6 +96,18 @@
     },
     components: {
       panelTitle
+    },
+    mounted() {
+      getMsg('/realtime/data').then(response => {
+        console.log('********response', response);
+      }).catch(error=>{
+        console.log(error);
+      });
+    },
+    watch: {
+      dateValue(val) {
+        console.log('*********datavale', val[0], val[1]);
+      }
     }
   }
 </script>
