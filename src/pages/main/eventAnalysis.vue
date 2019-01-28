@@ -5,7 +5,7 @@
         <panel-title :title="$route.meta.title"></panel-title>
       </el-col>
       <el-col :span="18" class="dateStyle">
-        <span class="refresh">
+        <span class="refresh" @click="refreshOwn()">
           <i class="el-icon-refresh" size="middle"></i>
         </span>
         修改日期
@@ -23,7 +23,7 @@
         <div class="cTitle">
           <p class="text1">GMV</p>
           <p class="text2">2019-01-03~2019-01-03|今日</p>
-          <p class="text3">4,053人</p>
+          <p class="text3">{{orderAmount}}</p>
           <p class="text4">
             同比
             <i class="el-icon-caret-bottom" style="color: red;"></i>
@@ -38,7 +38,7 @@
         <div class="cTitle">
           <p class="text1">订单数量</p>
           <p class="text2">2019-01-03~2019-01-03|今日</p>
-          <p class="text3">4,053人</p>
+          <p class="text3">{{orderCount}}次</p>
           <p class="text4">
             同比
             <i class="el-icon-caret-top" style="color: green;"></i>
@@ -55,7 +55,7 @@
         <div class="cTitle">
           <p class="text1">下单人数</p>
           <p class="text2">2019-01-03~2019-01-03|今日</p>
-          <p class="text3">4,053人</p>
+          <p class="text3">{{orderUsersCount}}人</p>
           <p class="text4">
             同比
             <i class="el-icon-caret-bottom" style="color: red;"></i>
@@ -70,7 +70,7 @@
         <div class="cTitle">
           <p class="text1">客单价</p>
           <p class="text2">2019-01-03~2019-01-03|今日</p>
-          <p class="text3">4,053人</p>
+          <p class="text3">{{orderAmountPerUser}}</p>
           <p class="text4">
             同比
             <i class="el-icon-caret-bottom" style="color: red;"></i>
@@ -85,16 +85,42 @@
   </div>
 </template>
 <script type="text/javascript">
-  import {panelTitle} from 'components'
+  import {panelTitle} from 'components';
+  import { getMsg } from "../../api/api";
 
   export default{
     data(){
       return {
-        dateValue: ''
+        dateValue: '',
+        orderAmount: null,
+        orderAmountPerUser: null,
+        orderCount: null,
+        orderUsersCount: null
       }
     },
     components: {
       panelTitle
+    },
+    mounted() {
+      getMsg('/event/data').then(response => {
+        console.log('********response', response);
+        this.orderAmount = response.data.data.orderAmount,
+        this.orderAmountPerUser = response.data.data.orderAmountPerUser,
+        this.orderCount = response.data.data.orderCount,
+        this.orderUsersCount = response.data.data.orderUsersCount
+      }).catch(error=>{
+        console.log(error);
+      });
+    },
+    methods: {
+      refreshOwn() {
+        window.location.reload();
+      }
+    },
+    watch: {
+      dateValue(val) {
+        console.log('*********datavale', val[0], val[1]);
+      }
     }
   }
 </script>

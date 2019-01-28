@@ -5,7 +5,7 @@
         <panel-title :title="$route.meta.title"></panel-title>
       </el-col>
       <el-col :span="18" class="dateStyle">
-        <span class="refresh">
+        <span class="refresh" @click="refreshOwn()">
           <i class="el-icon-refresh" size="middle"></i>
         </span>
         修改日期
@@ -103,6 +103,11 @@
       }).catch(error=>{
         console.log(error);
       });
+    },
+    methods: {
+      refreshOwn() {
+        window.location.reload();
+      }
     },
     watch: {
       dateValue(val) {

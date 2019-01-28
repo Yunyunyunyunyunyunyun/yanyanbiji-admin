@@ -5,7 +5,7 @@
         <panel-title :title="$route.meta.title"></panel-title>
       </el-col>
       <el-col :span="18" class="dateStyle">
-        <span class="refresh">
+        <span class="refresh" @click="refreshOwn()">
           <i class="el-icon-refresh" size="middle"></i>
         </span>
         修改日期
@@ -26,11 +26,13 @@
           <p class="text3">{{dataOne}}次</p>
           <p class="text4">
             同比
-            <i class="el-icon-caret-bottom" style="color: red;"></i>
-            <span style="color: red; padding-right: 40px;">29.14%</span>
+            <i v-if="samePeriodOne < 0" class="el-icon-caret-bottom" :class="samePeriodOne < 0 ? 'green' : 'red'"></i>
+            <i v-else class="el-icon-caret-top" :class="samePeriodOne < 0 ? 'green' : 'red'"></i>
+            <span style="padding-right: 40px;" :class="samePeriodOne < 0 ? 'green' : 'red'">{{samePeriodOne}}%</span>
             环比
-            <i class="el-icon-caret-bottom" style="color: red;"></i>
-            <span style="color: red;">25.37%</span>
+            <i v-if="sequentialGrowthOne < 0" class="el-icon-caret-bottom" :class="sequentialGrowthOne < 0 ? 'green' : 'red'"></i>
+            <i v-else class="el-icon-caret-top" :class="sequentialGrowthOne < 0 ? 'green' : 'red'"></i>
+            <span :class="sequentialGrowthOne < 0 ? 'green' : 'red'">{{sequentialGrowthOne}}%</span>
           </p>
         </div>
       </el-col>
@@ -41,11 +43,13 @@
           <p class="text3">{{dataTwo}}%</p>
           <p class="text4">
             同比
-            <i class="el-icon-caret-top" style="color: green;"></i>
-            <span style="color: green; padding-right: 40px;">29.14%</span>
+            <i v-if="samePeriodTwo < 0" class="el-icon-caret-bottom" :class="samePeriodTwo < 0 ? 'green' : 'red'"></i>
+            <i v-else class="el-icon-caret-top" :class="samePeriodTwo < 0 ? 'green' : 'red'"></i>
+            <span style="padding-right: 40px;" :class="samePeriodTwo < 0 ? 'green' : 'red'">{{samePeriodTwo}}%</span>
             环比
-            <i class="el-icon-caret-top" style="color: green;"></i>
-            <span style="color: green;">25.37%</span>
+            <i v-if="sequentialGrowthTwo < 0" class="el-icon-caret-bottom" :class="sequentialGrowthTwo < 0 ? 'green' : 'red'"></i>
+            <i v-else class="el-icon-caret-top" :class="sequentialGrowthTwo < 0 ? 'green' : 'red'"></i>
+            <span :class="sequentialGrowthTwo < 0 ? 'green' : 'red'">{{sequentialGrowthTwo}}%</span>
           </p>
         </div>
       </el-col>
@@ -58,11 +62,13 @@
           <p class="text3">{{dataThree}}次</p>
           <p class="text4">
             同比
-            <i class="el-icon-caret-bottom" style="color: red;"></i>
-            <span style="color: red; padding-right: 40px;">29.14%</span>
+            <i v-if="samePeriodThree < 0" class="el-icon-caret-bottom" :class="samePeriodThree < 0 ? 'green' : 'red'"></i>
+            <i v-else class="el-icon-caret-top" :class="samePeriodThree < 0 ? 'green' : 'red'"></i>
+            <span style="padding-right: 40px;" :class="samePeriodThree < 0 ? 'green' : 'red'">{{samePeriodThree}}%</span>
             环比
-            <i class="el-icon-caret-bottom" style="color: red;"></i>
-            <span style="color: red;">25.37%</span>
+            <i v-if="sequentialGrowthThree < 0" class="el-icon-caret-bottom" :class="sequentialGrowthThree < 0 ? 'green' : 'red'"></i>
+            <i v-else class="el-icon-caret-top" :class="sequentialGrowthThree < 0 ? 'green' : 'red'"></i>
+            <span :class="sequentialGrowthThree < 0 ? 'green' : 'red'">{{sequentialGrowthThree}}%</span>
           </p>
         </div>
       </el-col>
@@ -73,11 +79,13 @@
           <p class="text3">{{dataFour}}%</p>
           <p class="text4">
             同比
-            <i class="el-icon-caret-bottom" style="color: red;"></i>
-            <span style="color: red; padding-right: 40px;">29.14%</span>
+            <i v-if="samePeriodFour < 0" class="el-icon-caret-bottom" :class="samePeriodFour < 0 ? 'green' : 'red'"></i>
+            <i v-else class="el-icon-caret-top" :class="samePeriodFour < 0 ? 'green' : 'red'"></i>
+            <span style="padding-right: 40px;" :class="samePeriodFour < 0 ? 'green' : 'red'">{{samePeriodFour}}%</span>
             环比
-            <i class="el-icon-caret-bottom" style="color: red;"></i>
-            <span style="color: red;">25.37%</span>
+            <i v-if="sequentialGrowthFour < 0" class="el-icon-caret-bottom" :class="sequentialGrowthFour < 0 ? 'green' : 'red'"></i>
+            <i v-else class="el-icon-caret-top" :class="sequentialGrowthFour < 0 ? 'green' : 'red'"></i>
+            <span :class="sequentialGrowthFour < 0 ? 'green' : 'red'">{{sequentialGrowthFour}}%</span>
           </p>
         </div>
       </el-col>
@@ -99,7 +107,15 @@
         timeOne: null,
         timeTwo: null,
         timeThree: null,
-        timeFour: null
+        timeFour: null,
+        samePeriodOne: null,
+        samePeriodTwo: null,
+        samePeriodThree: null,
+        samePeriodFour: null,
+        sequentialGrowthOne: null,
+        sequentialGrowthTwo: null,
+        sequentialGrowthThree: null,
+        sequentialGrowthFour: null
       }
     },
     components: {
@@ -118,7 +134,15 @@
           this.timeOne = response.data.data[3].time,
           this.timeTwo = response.data.data[3].time,
           this.timeThree = response.data.data[3].time,
-          this.timeFour = response.data.data[3].time
+          this.timeFour = response.data.data[3].time,
+          this.samePeriodOne = response.data.data[0].samePeriod,
+          this.samePeriodTwo = response.data.data[1].samePeriod,
+          this.samePeriodThree = response.data.data[2].samePeriod,
+          this.samePeriodFour = response.data.data[3].samePeriod,
+          this.sequentialGrowthOne = response.data.data[0].sequentialGrowth,
+          this.sequentialGrowthTwo = response.data.data[1].sequentialGrowth,
+          this.sequentialGrowthThree = response.data.data[2].sequentialGrowth,
+          this.sequentialGrowthFour = response.data.data[3].sequentialGrowth
         }).catch(error=>{
           console.log(error);
         });
@@ -135,11 +159,13 @@
         }
         var dateTime = year + "-" + month + "-" + day;
         return dateTime;
+      },
+      refreshOwn() {
+        window.location.reload();
       }
     },
     watch: {
       dateValue(val) {
-        console.log('*********datavale', val[0], val[1]);
         var start = this.dateToString(val[0]);
         var end = this.dateToString(val[1]);
         this.getCurrencyMsg('/userBehavior/data', 'startTime=' + start + '&endTime=' + end);
@@ -192,5 +218,11 @@
     padding: 24px 0 19px 22px;
     font-size: 20px;
     font-family: SourceHanSansSC-regular;
+  }
+  .green {
+    color: green;
+  }
+  .red {
+    color: red;
   }
 </style>
