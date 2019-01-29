@@ -23,7 +23,7 @@
         <div class="cTitle">
           <p class="text1">GMV</p>
           <p class="text2">2019-01-03~2019-01-03|今日</p>
-          <p class="text3">{{orderAmount}}</p>
+          <p class="text3">{{orderAmount/10000}}<span class="smallFont">万</span></p>
           <p class="text4">
             同比
             <i class="el-icon-caret-bottom" style="color: red;"></i>
@@ -38,7 +38,7 @@
         <div class="cTitle">
           <p class="text1">订单数量</p>
           <p class="text2">2019-01-03~2019-01-03|今日</p>
-          <p class="text3">{{orderCount}}次</p>
+          <p class="text3">{{orderCount}}<span class="smallFont">次</span></p>
           <p class="text4">
             同比
             <i class="el-icon-caret-top" style="color: green;"></i>
@@ -55,7 +55,7 @@
         <div class="cTitle">
           <p class="text1">下单人数</p>
           <p class="text2">2019-01-03~2019-01-03|今日</p>
-          <p class="text3">{{orderUsersCount}}人</p>
+          <p class="text3">{{orderUsersCount}}<span class="smallFont">人</span></p>
           <p class="text4">
             同比
             <i class="el-icon-caret-bottom" style="color: red;"></i>
@@ -147,27 +147,26 @@
     border-radius: 5px;
   }
   .text1 {
-    /* height: 40px; */
     padding: 8px 0 10px 22px;
     font-size: 28px;
     font-family: SourceHanSansSC-regular;
   }
   .text2 {
-    /* height: 29px; */
     padding: 0 0 24px 22px;
     font-size: 20px;
     font-family: SourceHanSansSC-regular;
   }
   .text3 {
-    /* height: 107px; */
     padding: 0 0 9px 22px;
     font-size: 72px;
     font-family: SourceHanSansSC-regular;
   }
   .text4 {
-    /* height: 26px; */
     padding: 24px 0 19px 22px;
     font-size: 20px;
     font-family: SourceHanSansSC-regular;
+  }
+  .smallFont {
+    font-size: 28px;
   }
 </style>

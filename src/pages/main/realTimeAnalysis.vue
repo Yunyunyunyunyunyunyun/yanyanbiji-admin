@@ -139,25 +139,21 @@
     border-radius: 5px;
   }
   .text1 {
-    /* height: 40px; */
     padding: 8px 0 10px 22px;
     font-size: 28px;
     font-family: SourceHanSansSC-regular;
   }
   .text2 {
-    /* height: 29px; */
     padding: 0 0 24px 22px;
     font-size: 20px;
     font-family: SourceHanSansSC-regular;
   }
   .text3 {
-    /* height: 107px; */
     padding: 0 0 9px 22px;
     font-size: 72px;
     font-family: SourceHanSansSC-regular;
   }
   .text4 {
-    /* height: 26px; */
     padding: 24px 0 19px 22px;
     font-size: 20px;
     font-family: SourceHanSansSC-regular;

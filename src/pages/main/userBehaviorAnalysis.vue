@@ -23,16 +23,16 @@
         <div class="cTitle">
           <p class="text1">研究生申请数</p>
           <p class="text2">{{timeOne}}</p>
-          <p class="text3">{{dataOne}}次</p>
+          <p class="text3">{{dataOne}}<span class="smallFont">次</span></p>
           <p class="text4">
             同比
             <i v-if="samePeriodOne < 0" class="el-icon-caret-bottom" :class="samePeriodOne < 0 ? 'green' : 'red'"></i>
             <i v-else class="el-icon-caret-top" :class="samePeriodOne < 0 ? 'green' : 'red'"></i>
-            <span style="padding-right: 40px;" :class="samePeriodOne < 0 ? 'green' : 'red'">{{samePeriodOne}}%</span>
+            <span style="padding-right: 40px;" :class="samePeriodOne < 0 ? 'green' : 'red'">{{samePeriodOne}}<span v-show="samePeriodOne">%</span></span>
             环比
             <i v-if="sequentialGrowthOne < 0" class="el-icon-caret-bottom" :class="sequentialGrowthOne < 0 ? 'green' : 'red'"></i>
             <i v-else class="el-icon-caret-top" :class="sequentialGrowthOne < 0 ? 'green' : 'red'"></i>
-            <span :class="sequentialGrowthOne < 0 ? 'green' : 'red'">{{sequentialGrowthOne}}%</span>
+            <span :class="sequentialGrowthOne < 0 ? 'green' : 'red'">{{sequentialGrowthOne}}<span v-show="sequentialGrowthOne">%</span></span>
           </p>
         </div>
       </el-col>
@@ -40,16 +40,16 @@
         <div class="cTitle">
           <p class="text1">研究生占比</p>
           <p class="text2">{{timeTwo}}</p>
-          <p class="text3">{{dataTwo}}%</p>
+          <p class="text3">{{dataTwo}}<span class="smallFont">%</span></p>
           <p class="text4">
             同比
             <i v-if="samePeriodTwo < 0" class="el-icon-caret-bottom" :class="samePeriodTwo < 0 ? 'green' : 'red'"></i>
             <i v-else class="el-icon-caret-top" :class="samePeriodTwo < 0 ? 'green' : 'red'"></i>
-            <span style="padding-right: 40px;" :class="samePeriodTwo < 0 ? 'green' : 'red'">{{samePeriodTwo}}%</span>
+            <span style="padding-right: 40px;" :class="samePeriodTwo < 0 ? 'green' : 'red'">{{samePeriodTwo}}<span v-show="samePeriodTwo">%</span></span>
             环比
             <i v-if="sequentialGrowthTwo < 0" class="el-icon-caret-bottom" :class="sequentialGrowthTwo < 0 ? 'green' : 'red'"></i>
             <i v-else class="el-icon-caret-top" :class="sequentialGrowthTwo < 0 ? 'green' : 'red'"></i>
-            <span :class="sequentialGrowthTwo < 0 ? 'green' : 'red'">{{sequentialGrowthTwo}}%</span>
+            <span :class="sequentialGrowthTwo < 0 ? 'green' : 'red'">{{sequentialGrowthTwo}}<span v-show="sequentialGrowthTwo">%</span></span>
           </p>
         </div>
       </el-col>
@@ -59,16 +59,16 @@
         <div class="cTitle">
           <p class="text1">问题查看次数</p>
           <p class="text2">{{timeThree}}</p>
-          <p class="text3">{{dataThree}}次</p>
+          <p class="text3">{{dataThree}}<span class="smallFont">次</span></p>
           <p class="text4">
             同比
             <i v-if="samePeriodThree < 0" class="el-icon-caret-bottom" :class="samePeriodThree < 0 ? 'green' : 'red'"></i>
             <i v-else class="el-icon-caret-top" :class="samePeriodThree < 0 ? 'green' : 'red'"></i>
-            <span style="padding-right: 40px;" :class="samePeriodThree < 0 ? 'green' : 'red'">{{samePeriodThree}}%</span>
+            <span style="padding-right: 40px;" :class="samePeriodThree < 0 ? 'green' : 'red'">{{samePeriodThree}}<span v-show="samePeriodThree">%</span></span>
             环比
             <i v-if="sequentialGrowthThree < 0" class="el-icon-caret-bottom" :class="sequentialGrowthThree < 0 ? 'green' : 'red'"></i>
             <i v-else class="el-icon-caret-top" :class="sequentialGrowthThree < 0 ? 'green' : 'red'"></i>
-            <span :class="sequentialGrowthThree < 0 ? 'green' : 'red'">{{sequentialGrowthThree}}%</span>
+            <span :class="sequentialGrowthThree < 0 ? 'green' : 'red'">{{sequentialGrowthThree}}<span v-show="sequentialGrowthThree">%</span></span>
           </p>
         </div>
       </el-col>
@@ -76,16 +76,16 @@
         <div class="cTitle">
           <p class="text1">答案采纳率</p>
           <p class="text2">{{timeFour}}</p>
-          <p class="text3">{{dataFour}}%</p>
+          <p class="text3">{{dataFour}}<span class="smallFont">%</span></p>
           <p class="text4">
             同比
             <i v-if="samePeriodFour < 0" class="el-icon-caret-bottom" :class="samePeriodFour < 0 ? 'green' : 'red'"></i>
             <i v-else class="el-icon-caret-top" :class="samePeriodFour < 0 ? 'green' : 'red'"></i>
-            <span style="padding-right: 40px;" :class="samePeriodFour < 0 ? 'green' : 'red'">{{samePeriodFour}}%</span>
+            <span style="padding-right: 40px;" :class="samePeriodFour < 0 ? 'green' : 'red'">{{samePeriodFour}}<span v-show="samePeriodFour">%</span></span>
             环比
             <i v-if="sequentialGrowthFour < 0" class="el-icon-caret-bottom" :class="sequentialGrowthFour < 0 ? 'green' : 'red'"></i>
             <i v-else class="el-icon-caret-top" :class="sequentialGrowthFour < 0 ? 'green' : 'red'"></i>
-            <span :class="sequentialGrowthFour < 0 ? 'green' : 'red'">{{sequentialGrowthFour}}%</span>
+            <span :class="sequentialGrowthFour < 0 ? 'green' : 'red'">{{sequentialGrowthFour}}<span v-show="sequentialGrowthFour">%</span></span>
           </p>
         </div>
       </el-col>
@@ -196,25 +196,21 @@
     border-radius: 5px;
   }
   .text1 {
-    /* height: 40px; */
     padding: 8px 0 10px 22px;
     font-size: 28px;
     font-family: SourceHanSansSC-regular;
   }
   .text2 {
-    /* height: 29px; */
     padding: 0 0 24px 22px;
     font-size: 20px;
     font-family: SourceHanSansSC-regular;
   }
   .text3 {
-    /* height: 107px; */
     padding: 0 0 9px 22px;
     font-size: 72px;
     font-family: SourceHanSansSC-regular;
   }
   .text4 {
-    /* height: 26px; */
     padding: 24px 0 19px 22px;
     font-size: 20px;
     font-family: SourceHanSansSC-regular;
@@ -224,5 +220,8 @@
   }
   .red {
     color: red;
+  }
+  .smallFont {
+    font-size: 28px;
   }
 </style>
