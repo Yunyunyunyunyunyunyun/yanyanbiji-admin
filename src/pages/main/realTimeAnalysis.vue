@@ -23,7 +23,7 @@
         <div class="cTitle">
           <p class="text1">小程序分享次数</p>
           <p class="text2">2019-01-03~2019-01-03|今日</p>
-          <p class="text3">4,053人</p>
+          <p class="text3">4,053<span class="smallFont">人</span></p>
           <p class="text4">
             同比
             <i class="el-icon-caret-bottom" style="color: red;"></i>
@@ -38,7 +38,7 @@
         <div class="cTitle">
           <p class="text1">小程序受邀注册成功用户数</p>
           <p class="text2">2019-01-03~2019-01-03|今日</p>
-          <p class="text3">4,053人</p>
+          <p class="text3">4,053<span class="smallFont">人</span></p>
           <p class="text4">
             同比
             <i class="el-icon-caret-top" style="color: green;"></i>
@@ -55,7 +55,7 @@
         <div class="cTitle">
           <p class="text1">小程序受邀注册用户占比</p>
           <p class="text2">2019-01-03~2019-01-03|今日</p>
-          <p class="text3">4,053人</p>
+          <p class="text3">4,053<span class="smallFont">人</span></p>
           <p class="text4">
             同比
             <i class="el-icon-caret-bottom" style="color: red;"></i>
@@ -70,7 +70,7 @@
         <div class="cTitle">
           <p class="text1">小程序分享成功率</p>
           <p class="text2">2019-01-03~2019-01-03|今日</p>
-          <p class="text3">4,053人</p>
+          <p class="text3">4,053<span class="smallFont">人</span></p>
           <p class="text4">
             同比
             <i class="el-icon-caret-bottom" style="color: red;"></i>
@@ -98,20 +98,38 @@
       panelTitle
     },
     mounted() {
-      getMsg('/realtime/data').then(response => {
-        console.log('********response', response);
-      }).catch(error=>{
-        console.log(error);
-      });
+      this.getCurrencyMsg('/realtime/data');
     },
     methods: {
       refreshOwn() {
         window.location.reload();
+      },
+      dateToString(now){
+        var year = now.getFullYear();
+        var month =(now.getMonth() + 1).toString();
+        var day = (now.getDate()).toString();
+        if (month.length == 1) {
+            month = "0" + month;
+        }
+        if (day.length == 1) {
+            day = "0" + day;
+        }
+        var dateTime = year + "-" + month + "-" + day;
+        return dateTime;
+      },
+      getCurrencyMsg(path, params) {
+        getMsg(path, params).then(response => {
+          console.log('********response', response);
+        }).catch(error=>{
+          console.log(error);
+        });
       }
     },
     watch: {
       dateValue(val) {
-        console.log('*********datavale', val[0], val[1]);
+        var start = this.dateToString(val[0]);
+        var end = this.dateToString(val[1]);
+        this.getCurrencyMsg('/realtime/data', 'start=' + start + '&end=' + end);
       }
     }
   }
@@ -157,5 +175,8 @@
     padding: 24px 0 19px 22px;
     font-size: 20px;
     font-family: SourceHanSansSC-regular;
+  }
+  .smallFont {
+    font-size: 28px;
   }
 </style>
