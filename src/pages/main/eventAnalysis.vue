@@ -22,7 +22,7 @@
       <el-col :span="12">
         <div class="cTitle">
           <p class="text1">GMV</p>
-          <p class="text2">2019-01-03~2019-01-03|今日</p>
+          <p class="text2">{{currentStart}} 至 {{currentEnd}}</p>
           <p class="text3">{{orderAmount/10000}}<span class="smallFont">万</span></p>
           <p class="text4">
             同比
@@ -37,7 +37,7 @@
       <el-col :span="12">
         <div class="cTitle">
           <p class="text1">订单数量</p>
-          <p class="text2">2019-01-03~2019-01-03|今日</p>
+          <p class="text2">{{currentStart}} 至 {{currentEnd}}</p>
           <p class="text3">{{orderCount}}<span class="smallFont">次</span></p>
           <p class="text4">
             同比
@@ -54,7 +54,7 @@
       <el-col :span="12">
         <div class="cTitle">
           <p class="text1">下单人数</p>
-          <p class="text2">2019-01-03~2019-01-03|今日</p>
+          <p class="text2">{{currentStart}} 至 {{currentEnd}}</p>
           <p class="text3">{{orderUsersCount}}<span class="smallFont">人</span></p>
           <p class="text4">
             同比
@@ -69,7 +69,7 @@
       <el-col :span="12">
         <div class="cTitle">
           <p class="text1">客单价</p>
-          <p class="text2">2019-01-03~2019-01-03|今日</p>
+          <p class="text2">{{currentStart}} 至 {{currentEnd}}</p>
           <p class="text3">{{orderAmountPerUser}}</p>
           <p class="text4">
             同比
@@ -87,6 +87,7 @@
 <script type="text/javascript">
   import {panelTitle} from 'components';
   import { getMsg } from "../../api/api";
+  import { formatDate as format } from '../../components/util';
 
   export default{
     data(){
@@ -95,31 +96,45 @@
         orderAmount: null,
         orderAmountPerUser: null,
         orderCount: null,
-        orderUsersCount: null
+        orderUsersCount: null,
+        currentStart: '',
+        currentEnd: ''
       }
     },
     components: {
       panelTitle
     },
     mounted() {
-      getMsg('/event/data').then(response => {
-        console.log('********response', response);
-        this.orderAmount = response.data.data.orderAmount,
-        this.orderAmountPerUser = response.data.data.orderAmountPerUser,
-        this.orderCount = response.data.data.orderCount,
-        this.orderUsersCount = response.data.data.orderUsersCount
-      }).catch(error=>{
-        console.log(error);
-      });
+      var date1 = new Date();
+      var date2 = new Date(date1.getTime() - 7 * 24 * 3600 * 1000);
+      var start = format(date2, 'yyyy-MM-dd');
+      var end = format(date1, 'yyyy-MM-dd');
+      this.currentStart = start;
+      this.currentEnd = end;
+      this.getCurrencyMsg('/event/data', 'start=' + start + '&end=' + end);
     },
     methods: {
       refreshOwn() {
         window.location.reload();
+      },
+      getCurrencyMsg(path, params) {
+        getMsg(path, params).then(response => {
+          this.orderAmount = response.data.data.orderAmount,
+          this.orderAmountPerUser = response.data.data.orderAmountPerUser,
+          this.orderCount = response.data.data.orderCount,
+          this.orderUsersCount = response.data.data.orderUsersCount
+        }).catch(error=>{
+          console.log(error);
+        });
       }
     },
     watch: {
       dateValue(val) {
-        console.log('*********datavale', val[0], val[1]);
+        var start = format(val[0], 'yyyy-MM-dd');
+        var end = format(val[1], 'yyyy-MM-dd');
+        this.currentStart = start;
+        this.currentEnd = end;
+        this.getCurrencyMsg('/event/data', 'start=' + start + '&end=' + end);
       }
     }
   }

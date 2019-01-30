@@ -95,6 +95,7 @@
 <script type="text/javascript">
   import {panelTitle} from 'components';
   import { getMsg } from "../../api/api";
+  import { formatDate as format } from '../../components/util';
 
   export default{
     data(){
@@ -147,27 +148,14 @@
           console.log(error);
         });
       },
-      dateToString(now){
-        var year = now.getFullYear();
-        var month =(now.getMonth() + 1).toString();
-        var day = (now.getDate()).toString();
-        if (month.length == 1) {
-            month = "0" + month;
-        }
-        if (day.length == 1) {
-            day = "0" + day;
-        }
-        var dateTime = year + "-" + month + "-" + day;
-        return dateTime;
-      },
       refreshOwn() {
         window.location.reload();
       }
     },
     watch: {
       dateValue(val) {
-        var start = this.dateToString(val[0]);
-        var end = this.dateToString(val[1]);
+        var start = format(val[0], 'yyyy-MM-dd');
+        var end = format(val[1], 'yyyy-MM-dd');
         this.getCurrencyMsg('/userBehavior/data', 'startTime=' + start + '&endTime=' + end);
       }
     }

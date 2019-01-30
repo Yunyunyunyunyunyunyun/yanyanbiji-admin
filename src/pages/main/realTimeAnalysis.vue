@@ -22,8 +22,8 @@
       <el-col :span="12">
         <div class="cTitle">
           <p class="text1">小程序分享次数</p>
-          <p class="text2">2019-01-03~2019-01-03|今日</p>
-          <p class="text3">4,053<span class="smallFont">人</span></p>
+          <p class="text2">{{currentStart}} 至 {{currentEnd}}</p>
+          <p class="text3">{{shareCount}}<span class="smallFont">次</span></p>
           <p class="text4">
             同比
             <i class="el-icon-caret-bottom" style="color: red;"></i>
@@ -37,8 +37,8 @@
       <el-col :span="12">
         <div class="cTitle">
           <p class="text1">小程序受邀注册成功用户数</p>
-          <p class="text2">2019-01-03~2019-01-03|今日</p>
-          <p class="text3">4,053<span class="smallFont">人</span></p>
+          <p class="text2">{{currentStart}} 至 {{currentEnd}}</p>
+          <p class="text3">{{joinerCount}}<span class="smallFont">人</span></p>
           <p class="text4">
             同比
             <i class="el-icon-caret-top" style="color: green;"></i>
@@ -54,8 +54,8 @@
       <el-col :span="12">
         <div class="cTitle">
           <p class="text1">小程序受邀注册用户占比</p>
-          <p class="text2">2019-01-03~2019-01-03|今日</p>
-          <p class="text3">4,053<span class="smallFont">人</span></p>
+          <p class="text2">{{currentStart}} 至 {{currentEnd}}</p>
+          <p class="text3">{{joinerPercent}}<span class="smallFont">%</span></p>
           <p class="text4">
             同比
             <i class="el-icon-caret-bottom" style="color: red;"></i>
@@ -69,8 +69,8 @@
       <el-col :span="12">
         <div class="cTitle">
           <p class="text1">小程序分享成功率</p>
-          <p class="text2">2019-01-03~2019-01-03|今日</p>
-          <p class="text3">4,053<span class="smallFont">人</span></p>
+          <p class="text2">{{currentStart}} 至 {{currentEnd}}</p>
+          <p class="text3">{{sharePercent}}<span class="smallFont">%</span></p>
           <p class="text4">
             同比
             <i class="el-icon-caret-bottom" style="color: red;"></i>
@@ -87,39 +87,42 @@
 <script type="text/javascript">
   import {panelTitle} from 'components';
   import { getMsg } from "../../api/api";
+  import { formatDate as format } from '../../components/util';
 
   export default{
     data(){
       return {
-        dateValue: ''
+        dateValue: '',
+        joinerCount: null,
+        joinerPercent: null,
+        shareCount: null,
+        sharePercent: null,
+        currentStart: '',
+        currentEnd: ''
       }
     },
     components: {
       panelTitle
     },
     mounted() {
-      this.getCurrencyMsg('/realtime/data');
+      var date1 = new Date();
+      var date2 = new Date(date1.getTime() - 7 * 24 * 3600 * 1000);
+      var start = format(date2, 'yyyy-MM-dd');
+      var end = format(date1, 'yyyy-MM-dd');
+      this.currentStart = start;
+      this.currentEnd = end;
+      this.getCurrencyMsg('/realtime/data', 'start=' + start + '&end=' + end);
     },
     methods: {
       refreshOwn() {
         window.location.reload();
       },
-      dateToString(now){
-        var year = now.getFullYear();
-        var month =(now.getMonth() + 1).toString();
-        var day = (now.getDate()).toString();
-        if (month.length == 1) {
-            month = "0" + month;
-        }
-        if (day.length == 1) {
-            day = "0" + day;
-        }
-        var dateTime = year + "-" + month + "-" + day;
-        return dateTime;
-      },
       getCurrencyMsg(path, params) {
         getMsg(path, params).then(response => {
-          console.log('********response', response);
+          this.joinerCount = response.data.data.joinerCount;
+          this.joinerPercent = response.data.data.joinerPercent;
+          this.shareCount = response.data.data.shareCount;
+          this.sharePercent = response.data.data.sharePercent;
         }).catch(error=>{
           console.log(error);
         });
@@ -127,8 +130,10 @@
     },
     watch: {
       dateValue(val) {
-        var start = this.dateToString(val[0]);
-        var end = this.dateToString(val[1]);
+        var start = format(val[0], 'yyyy-MM-dd');
+        var end = format(val[1], 'yyyy-MM-dd');
+        this.currentStart = start;
+        this.currentEnd = end;
         this.getCurrencyMsg('/realtime/data', 'start=' + start + '&end=' + end);
       }
     }
