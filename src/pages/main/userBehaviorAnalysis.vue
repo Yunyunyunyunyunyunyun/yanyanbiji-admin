@@ -28,11 +28,11 @@
             同比
             <i v-if="samePeriodOne < 0" class="el-icon-caret-bottom" :class="samePeriodOne < 0 ? 'green' : 'red'"></i>
             <i v-else class="el-icon-caret-top" :class="samePeriodOne < 0 ? 'green' : 'red'"></i>
-            <span style="padding-right: 40px;" :class="samePeriodOne < 0 ? 'green' : 'red'">{{samePeriodOne}}<span v-show="samePeriodOne">%</span></span>
+            <span style="padding-right: 40px;" :class="samePeriodOne < 0 ? 'green' : 'red'">{{Math.abs(samePeriodOne)}}<span v-show="samePeriodOne">%</span></span>
             环比
             <i v-if="sequentialGrowthOne < 0" class="el-icon-caret-bottom" :class="sequentialGrowthOne < 0 ? 'green' : 'red'"></i>
             <i v-else class="el-icon-caret-top" :class="sequentialGrowthOne < 0 ? 'green' : 'red'"></i>
-            <span :class="sequentialGrowthOne < 0 ? 'green' : 'red'">{{sequentialGrowthOne}}<span v-show="sequentialGrowthOne">%</span></span>
+            <span :class="sequentialGrowthOne < 0 ? 'green' : 'red'">{{Math.abs(sequentialGrowthOne)}}<span v-show="sequentialGrowthOne">%</span></span>
           </p>
         </div>
       </el-col>
@@ -45,11 +45,11 @@
             同比
             <i v-if="samePeriodTwo < 0" class="el-icon-caret-bottom" :class="samePeriodTwo < 0 ? 'green' : 'red'"></i>
             <i v-else class="el-icon-caret-top" :class="samePeriodTwo < 0 ? 'green' : 'red'"></i>
-            <span style="padding-right: 40px;" :class="samePeriodTwo < 0 ? 'green' : 'red'">{{samePeriodTwo}}<span v-show="samePeriodTwo">%</span></span>
+            <span style="padding-right: 40px;" :class="samePeriodTwo < 0 ? 'green' : 'red'">{{Math.abs(samePeriodTwo)}}<span v-show="samePeriodTwo">%</span></span>
             环比
             <i v-if="sequentialGrowthTwo < 0" class="el-icon-caret-bottom" :class="sequentialGrowthTwo < 0 ? 'green' : 'red'"></i>
             <i v-else class="el-icon-caret-top" :class="sequentialGrowthTwo < 0 ? 'green' : 'red'"></i>
-            <span :class="sequentialGrowthTwo < 0 ? 'green' : 'red'">{{sequentialGrowthTwo}}<span v-show="sequentialGrowthTwo">%</span></span>
+            <span :class="sequentialGrowthTwo < 0 ? 'green' : 'red'">{{Math.abs(sequentialGrowthTwo)}}<span v-show="sequentialGrowthTwo">%</span></span>
           </p>
         </div>
       </el-col>
@@ -64,11 +64,11 @@
             同比
             <i v-if="samePeriodThree < 0" class="el-icon-caret-bottom" :class="samePeriodThree < 0 ? 'green' : 'red'"></i>
             <i v-else class="el-icon-caret-top" :class="samePeriodThree < 0 ? 'green' : 'red'"></i>
-            <span style="padding-right: 40px;" :class="samePeriodThree < 0 ? 'green' : 'red'">{{samePeriodThree}}<span v-show="samePeriodThree">%</span></span>
+            <span style="padding-right: 40px;" :class="samePeriodThree < 0 ? 'green' : 'red'">{{Math.abs(samePeriodThree)}}<span v-show="samePeriodThree">%</span></span>
             环比
             <i v-if="sequentialGrowthThree < 0" class="el-icon-caret-bottom" :class="sequentialGrowthThree < 0 ? 'green' : 'red'"></i>
             <i v-else class="el-icon-caret-top" :class="sequentialGrowthThree < 0 ? 'green' : 'red'"></i>
-            <span :class="sequentialGrowthThree < 0 ? 'green' : 'red'">{{sequentialGrowthThree}}<span v-show="sequentialGrowthThree">%</span></span>
+            <span :class="sequentialGrowthThree < 0 ? 'green' : 'red'">{{Math.abs(sequentialGrowthThree)}}<span v-show="sequentialGrowthThree">%</span></span>
           </p>
         </div>
       </el-col>
@@ -81,11 +81,11 @@
             同比
             <i v-if="samePeriodFour < 0" class="el-icon-caret-bottom" :class="samePeriodFour < 0 ? 'green' : 'red'"></i>
             <i v-else class="el-icon-caret-top" :class="samePeriodFour < 0 ? 'green' : 'red'"></i>
-            <span style="padding-right: 40px;" :class="samePeriodFour < 0 ? 'green' : 'red'">{{samePeriodFour}}<span v-show="samePeriodFour">%</span></span>
+            <span style="padding-right: 40px;" :class="samePeriodFour < 0 ? 'green' : 'red'">{{Math.abs(samePeriodFour)}}<span v-show="samePeriodFour">%</span></span>
             环比
             <i v-if="sequentialGrowthFour < 0" class="el-icon-caret-bottom" :class="sequentialGrowthFour < 0 ? 'green' : 'red'"></i>
             <i v-else class="el-icon-caret-top" :class="sequentialGrowthFour < 0 ? 'green' : 'red'"></i>
-            <span :class="sequentialGrowthFour < 0 ? 'green' : 'red'">{{sequentialGrowthFour}}<span v-show="sequentialGrowthFour">%</span></span>
+            <span :class="sequentialGrowthFour < 0 ? 'green' : 'red'">{{Math.abs(sequentialGrowthFour)}}<span v-show="sequentialGrowthFour">%</span></span>
           </p>
         </div>
       </el-col>

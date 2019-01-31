@@ -374,14 +374,7 @@
       },
       handleCurrentChange(val) {
         this.currentPage = val;
-        let path = 'postgraduate/apply/list';
-        let params1 = 'pageSize=' + this.pageSize + '&pageNum=' + (this.currentPage-1) + '&term=' + this.searchInput + '&eduLevel=' + this.education + '&collegeEnterTime=' + this.admissionTime + '&status=' + this.application;
-        let params2 = 'pageSize=' + this.pageSize + '&pageNum=' + (this.currentPage-1) + '&eduLevel=' + this.education + '&collegeEnterTime=' + this.admissionTime + '&status=' + this.application;
-        if (this.searchInput != null && this.searchInput !== '') {
-          this.getCurrencyMsg(path, params1);
-        } else {
-          this.getCurrencyMsg(path, params2);
-        }
+        this.publicGetMsg();
       },
       getCurrencyMsg(path, params) {
         getMsg(path, params).then(response => {
@@ -393,10 +386,13 @@
       },
       searchKey() {
         this.searchInput = this.input;
+        this.publicGetMsg();
+      },
+      publicGetMsg() {
         let path = 'postgraduate/apply/list';
-        let params1 = 'pageSize=' + this.pageSize + '&pageNum=' + (this.currentPage-1) + '&term=' + this.input + '&eduLevel=' + this.education + '&collegeEnterTime=' + this.admissionTime + '&status=' + this.application;
+        let params1 = 'pageSize=' + this.pageSize + '&pageNum=' + (this.currentPage-1) + '&term=' + this.searchInput + '&eduLevel=' + this.education + '&collegeEnterTime=' + this.admissionTime + '&status=' + this.application;
         let params2 = 'pageSize=' + this.pageSize + '&pageNum=' + (this.currentPage-1) + '&eduLevel=' + this.education + '&collegeEnterTime=' + this.admissionTime + '&status=' + this.application;
-        if (this.input != null && this.input !== '') {
+        if (this.searchInput != null && this.searchInput !== '') {
           this.getCurrencyMsg(path, params1);
         } else {
           this.getCurrencyMsg(path, params2);
@@ -405,13 +401,14 @@
       getApply(value) {
         if (window.confirm('您确定要改变审核状态吗？')) {
           postMsg('postgraduate/apply/' + value.id + '/' + value.status).then((res) => {
-            window.location.reload();
+            this.publicGetMsg();
           }).catch(error=>{
-            window.location.reload();
+            window.alert('您的请求出错了，请重试！')
+            this.publicGetMsg();
             console.log(error);
           });
         } else {
-          window.location.reload();
+          this.publicGetMsg();
         }
       }
     },
