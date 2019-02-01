@@ -323,7 +323,7 @@
         this.ids = Array.from(new Set(this.ids));
         deleteMsg('questionMgr/delete', 'ids=' + this.ids).then((res) => {
           if (res.data.code === 0) {
-            window.location.reload();
+            this.publicGetMsg();
           }
         }).catch(error=>{
           console.log(error);
@@ -342,14 +342,7 @@
       },
       searchKey() {
         this.searchInput = this.input;
-        let path = 'questionMgr/list';
-        let params1 = 'pageSize=' + this.pageSize + '&pageNum=' + (this.currentPage-1) + '&term=' + this.input + '&acceptPersent=' + this.adoptionRate + '&status=' + this.problemState;
-        let params2 = 'pageSize=' + this.pageSize + '&pageNum=' + (this.currentPage-1) + '&acceptPersent=' + this.adoptionRate + '&status=' + this.problemState;
-        if (this.input != null && this.input !== '') {
-          this.getCurrencyMsg(path, params1);
-        } else {
-          this.getCurrencyMsg(path, params2);
-        }
+        this.publicGetMsg();
       },
       getRowKeys(row) {
         return row.id;
@@ -361,8 +354,7 @@
           that.contentDetails = res.data.data;
         })
       },
-      handleCurrentChange(val) {
-        this.currentPage = val;
+      publicGetMsg() {
         let path = 'questionMgr/list';
         let params1 = 'pageSize=' + this.pageSize + '&pageNum=' + (this.currentPage-1) + '&term=' + this.searchInput + '&acceptPersent=' + this.adoptionRate + '&status=' + this.problemState;
         let params2 = 'pageSize=' + this.pageSize + '&pageNum=' + (this.currentPage-1) + '&acceptPersent=' + this.adoptionRate + '&status=' + this.problemState;
@@ -371,6 +363,10 @@
         } else {
           this.getCurrencyMsg(path, params2);
         }
+      },
+      handleCurrentChange(val) {
+        this.currentPage = val;
+        this.publicGetMsg();
       }
     },
     watch: {

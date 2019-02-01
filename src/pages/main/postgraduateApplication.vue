@@ -340,7 +340,7 @@
         this.ids = Array.from(new Set(this.ids));
         deleteMsg('postgraduate/apply/delete', 'ids=' + this.ids).then((res) => {
           if (res.data.code === 0) {
-            window.location.reload();
+            this.publicGetMsg();
           }
         }).catch(error=>{
           console.log(error);
